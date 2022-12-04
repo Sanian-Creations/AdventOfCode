@@ -2,11 +2,11 @@ package adventofcode
 
 import "core:fmt"
 import "core:intrinsics"
-import "../../shared"
+import "../../aoc_util"
 
 main :: proc() {
 
-	data, ok := shared.read_input();
+	data, ok := aoc_util.read_input();
 	if !ok { return }
 	
 	p1, p2 := part1and2(data)
@@ -17,12 +17,10 @@ main :: proc() {
 Item_Set :: bit_set[u8('A')..= u8('z'); u64]
 
 part1and2 :: proc(data: string) -> (sum1, sum2: int) {
-	using shared
-	
 	group: [3]Item_Set // every member of the group has an item set
 	
-	iterator := String_Iterator{ data = data }
-	for line, lnr in iter_lines(&iterator) {
+	iterator := aoc_util.String_Iterator{ data = data }
+	for line, lnr in aoc_util.iter_lines(&iterator) {
 
 		pocket_size := len(line) / 2
 		pocket_1 := line[:pocket_size]

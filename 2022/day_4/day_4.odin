@@ -3,10 +3,10 @@ package adventofcode
 import "core:fmt"
 import "core:strings"
 import "core:strconv"
-import "../../shared"
+import "../../aoc_util"
 
 main :: proc() {
-	data, ok := shared.read_input();
+	data, ok := aoc_util.read_input();
 	if !ok { return }
 	
 	p1, p2 := part1and2(data)
@@ -21,12 +21,12 @@ Section :: struct {
 part1and2 :: proc(data: string) -> (points1, points2: int) {
 	data := data
 	
-	for line in shared.iter_lines(&data) {
+	for line in aoc_util.iter_lines(&data) {
 		max_str: string
-		min_str, line := shared.split_on_byte(line, '-')
-		max_str, line  = shared.split_on_byte(line, ',')
+		min_str, line := aoc_util.split_on_byte(line, '-')
+		max_str, line  = aoc_util.split_on_byte(line, ',')
 		section_1 := make_section(min_str, max_str)
-		min_str, max_str = shared.split_on_byte(line, '-')
+		min_str, max_str = aoc_util.split_on_byte(line, '-')
 		section_2 := make_section(min_str, max_str)
 
 		if fully_within(section_1, section_2) || fully_within(section_2, section_1) {

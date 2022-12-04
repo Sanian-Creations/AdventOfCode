@@ -2,11 +2,11 @@ package adventofcode
 
 import "core:fmt"
 import "core:strconv"
-import "../../shared"
+import "../../aoc_util"
 
 main :: proc() {
 
-	data, ok := shared.read_input();
+	data, ok := aoc_util.read_input();
 	if !ok { return }
 	
 	top_3: [3]int
@@ -20,8 +20,7 @@ calculate_calories :: proc(data: string, top_N_calories: []int) -> (total: int) 
 	data := data
 	current_calories := 0
 
-
-	for line in shared.iter_lines(&data) {
+	for line in aoc_util.iter_lines(&data) {
 		nr, ok := strconv.parse_int(line)
 		if ok {
 			current_calories += nr

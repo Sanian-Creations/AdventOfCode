@@ -1,11 +1,11 @@
 package adventofcode
 
 import "core:fmt"
-import "../../shared"
+import "../../aoc_util"
 
 main :: proc() {
 
-	data, ok := shared.read_input()
+	data, ok := aoc_util.read_input()
 	if !ok { return }
 
 	p1, p2 := part1and2(data)
@@ -15,7 +15,7 @@ main :: proc() {
 
 part1and2 :: proc(data: string) -> (points1, points2: int) {
 	data := data
-	for line in shared.iter_lines(&data) {
+	for line in aoc_util.iter_lines(&data) {
 		other := get_move(line[0])
 		me    := get_move(line[2])
 		points1 += get_points_pt1(me, other)

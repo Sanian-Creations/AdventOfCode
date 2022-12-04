@@ -18,14 +18,16 @@ Section :: struct {
 	min, max: int
 }
 
-part1and2 :: proc(data: []u8) -> (points1, points2: int) {
-	iterator := string(data)
-	for line in shared.iter_lines(&iterator) {
-		dash  := strings.index_byte(line, '-')
-		comma := strings.index_byte(line, ',')
-		section_1 := make_section(line[:dash], line[dash+1:comma])
-		dash   = strings.last_index_byte(line, '-')
-		section_2 := make_section(line[comma+1:dash], line[dash+1:])
+part1and2 :: proc(data: string) -> (points1, points2: int) {
+	data := data
+	
+	for line in shared.iter_lines(&data) {
+		max_str: string
+		min_str, line := shared.split_on_byte(line, '-')
+		max_str, line  = shared.split_on_byte(line, ',')
+		section_1 := make_section(min_str, max_str)
+		min_str, max_str = shared.split_on_byte(line, '-')
+		section_2 := make_section(min_str, max_str)
 
 		if fully_within(section_1, section_2) || fully_within(section_2, section_1) {
 			points1 += 1
@@ -47,18 +49,8 @@ overlaps :: #force_inline proc(s1, s2: Section) -> bool {
 	return s1.min <= s2.max && s1.max >= s2.min
 }
 
-make_section :: proc(s1, s2: string) -> Section {
-	return Section{
-		min = parse_int(s1),
-		max = parse_int(s2)
-	}
-}
-
-parse_int :: proc(s: string) -> int {
-	i, ok := strconv.parse_int(s)
-	if !ok {
-		fmt.printf("Failed to parse string \"%v\"\n", s)
-		panic("")
-	}
-	return i
+make_section :: proc(min_str, max_str: string) -> (s: Section) {
+	s.min, _ = strconv.parse_int(min_str)
+	s.max, _ = strconv.parse_int(max_str)
+	return s
 }

@@ -16,13 +16,13 @@ main :: proc() {
 
 }
 
-calculate_calories :: proc(data: []u8, top_N_calories: []int) -> (total: int) {
-
+calculate_calories :: proc(data: string, top_N_calories: []int) -> (total: int) {
+	data := data
 	current_calories := 0
 
-	iterator := data
-	for line in shared.iter_lines(&iterator) {
-		nr, ok := strconv.parse_int(string(line))
+
+	for line in shared.iter_lines(&data) {
+		nr, ok := strconv.parse_int(line)
 		if ok {
 			current_calories += nr
 			continue

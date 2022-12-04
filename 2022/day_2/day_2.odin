@@ -13,9 +13,9 @@ main :: proc() {
 	fmt.printf("part 2: %v\n", p2)
 }
 
-part1and2 :: proc(data: []u8) -> (points1, points2: int) {
-	iter := data
-	for line in shared.iter_lines(&iter) {
+part1and2 :: proc(data: string) -> (points1, points2: int) {
+	data := data
+	for line in shared.iter_lines(&data) {
 		other := get_move(line[0])
 		me    := get_move(line[2])
 		points1 += get_points_pt1(me, other)

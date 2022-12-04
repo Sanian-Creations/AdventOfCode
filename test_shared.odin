@@ -5,7 +5,7 @@ import "shared"
 
 main :: proc() {
 	using shared
-	str :string:
+	str ::
 `here we 
 have a very
 long string
@@ -18,12 +18,18 @@ also empty lines
 
 and other stuff`
 	
-	windows_str :string: "here\r\nis a string\r\nthat has both\r\ncarriage return and\r\nnewlines"
+	windows_str :: "here\r\nis a string\r\nthat has both\r\ncarriage return and\r\nnewlines"
 
+	it1 := str
+	it2 := windows_str
 	
-	str_data := transmute([]u8) str;
+	for ln in shared.iter_lines(&it1) {
+		fmt.printf("--%v--\n", string(ln));
+	}
+
+	fmt.println();
 	
-	for ln in shared.iter_lines(&str_data) {
+	for ln in shared.iter_lines(&it2) {
 		fmt.printf("--%v--\n", string(ln));
 	}
 }

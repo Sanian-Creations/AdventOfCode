@@ -16,12 +16,12 @@ main :: proc() {
 
 Item_Set :: bit_set[u8('A')..= u8('z'); u64]
 
-part1and2 :: proc(data: []u8) -> (sum1, sum2: int) {
+part1and2 :: proc(data: string) -> (sum1, sum2: int) {
 	using shared
 	
 	group: [3]Item_Set // every member of the group has an item set
 	
-	iterator := Iterator([]u8){ data = data }
+	iterator := String_Iterator{ data = data }
 	for line, lnr in iter_lines(&iterator) {
 
 		pocket_size := len(line) / 2

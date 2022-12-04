@@ -1,9 +1,8 @@
 package adventofcode
 
 import "core:fmt"
-import "core:os"
-import "../../shared"
 import "core:intrinsics"
+import "../../shared"
 
 main :: proc() {
 

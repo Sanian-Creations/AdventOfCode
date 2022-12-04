@@ -1,7 +1,6 @@
 package adventofcode
 
 import "core:fmt"
-import "core:os"
 import "../../shared"
 
 main :: proc() {

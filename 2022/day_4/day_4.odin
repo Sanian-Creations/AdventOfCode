@@ -8,7 +8,7 @@ import "../../aoc_util"
 main :: proc() {
 	data, ok := aoc_util.read_input();
 	if !ok { return }
-	
+
 	p1, p2 := part1and2(data)
 	fmt.printf("part 1: %v\n", p1)
 	fmt.printf("part 2: %v\n", p2)
@@ -18,9 +18,15 @@ Section :: struct {
 	min, max: int
 }
 
+make_section :: proc(min_str, max_str: string) -> (s: Section) {
+	s.min, _ = strconv.parse_int(min_str)
+	s.max, _ = strconv.parse_int(max_str)
+	return s
+}
+
 part1and2 :: proc(data: string) -> (points1, points2: int) {
+
 	data := data
-	
 	for line in aoc_util.iter_lines(&data) {
 		max_str: string
 		min_str, line := aoc_util.split_on_byte(line, '-')
@@ -47,10 +53,4 @@ fully_within :: #force_inline proc(s1, s2: Section) -> bool {
 
 overlaps :: #force_inline proc(s1, s2: Section) -> bool {
 	return s1.min <= s2.max && s1.max >= s2.min
-}
-
-make_section :: proc(min_str, max_str: string) -> (s: Section) {
-	s.min, _ = strconv.parse_int(min_str)
-	s.max, _ = strconv.parse_int(max_str)
-	return s
 }

@@ -35,9 +35,9 @@ get_move :: proc(move: u8) -> int {
 }
 
 get_points_pt1 :: proc(me, other: int) -> int {
-	if (other == me) { return me + 1 + 3 }            // Draw
-	if (other == lose_from(me)) { return me + 1 + 6 } // I win
-	return me + 1                                     // I lose
+	if (me == other) { return me + 1 + 3 }
+	if (me == win_from(other)) { return me + 1 + 6 }
+	return me + 1
 }
 
 get_points_pt2 :: proc(me, other: int) -> int {

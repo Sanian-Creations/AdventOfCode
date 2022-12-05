@@ -1,19 +1,19 @@
 package adventofcode
 
 import "core:fmt"
-import "../../shared"
+import "../../aoc_util"
 
 main :: proc() {
-	data, ok := shared.read_input();
+	data, ok := aoc_util.read_input();
 	if !ok { return }
 
 	part1(data)
 }
 
-part1 :: proc(data: []u8) {
+part1 :: proc(data: string) {
 
 	iterator := data
-	for line in shared.iter_lines(&iterator) {
+	for line in aoc_util.iter_lines(&iterator) {
 		fmt.printf("%s\n", line)
 	}
 }

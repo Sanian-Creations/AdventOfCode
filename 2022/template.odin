@@ -4,7 +4,7 @@ import "core:fmt"
 import "../../aoc_util"
 
 main :: proc() {
-	data, ok := aoc_util.read_input();
+	data, ok := aoc_util.read_input()
 	if !ok { return }
 
 	part1(data)

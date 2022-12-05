@@ -32,21 +32,25 @@ part1and2 :: proc(data: string) -> (sum1, sum2: int) {
 			incl(&itemset_2, pocket_2[i])
 		}
 
-		add_points :: #force_inline proc(sum: ^int, set: Item_Set) {
-			if set == (Item_Set{}) { panic("Item set had no 1-bits.\n") }
-			matching_item := 'A' + cast(int) intrinsics.count_trailing_zeros(transmute(u64) set)
-			sum^ += matching_item + (27-'A' if matching_item <= 'Z' else 1-'a')
+		get_points :: proc(set: Item_Set) -> int {
+			set := transmute(u64) set
+			if intrinsics.count_ones(set) != 1 {
+				fmt.printf("Only a single bit should be set to 1, instead was:\n%#b\n", set)
+				panic("")
+			}
+			matching_item := 'A' + cast(int) intrinsics.count_trailing_zeros(set)
+			return matching_item + (27-'A' if matching_item <= 'Z' else 1-'a')
 		}
 
 		// pt1: matching item in both pockets
-		add_points(&sum1, itemset_1 & itemset_2)
+		sum1 += get_points(itemset_1 & itemset_2)
 
 		mod3 := lnr % 3
 		group[mod3] = itemset_1 | itemset_2
 
 		if mod3 == 2 {
 			// pt2: matching item in group of 3 elves
-			add_points(&sum2, group[0] & group[1] & group[2])
+			sum2 += get_points(group[0] & group[1] & group[2])
 		}
 	}
 

@@ -58,21 +58,19 @@ part1and2 :: proc(input: string) {
 	// PART 1
 	
 	for y in 1..<line_count-1 { // check visibility horizontally
-
 		tallest, second_tallest: u8
-		x := 0
-
-		for x < line_len {
+		x := line_len - 1
+		for x >= 0 {
 			tree := get_tree(&info, x, y)
 			if tree > tallest {
 				tallest = tree
 				mark_visible(&info, x, y)
 			}
-			x += 1
-		}
-		// x == line_len
-		for {
 			x -= 1
+		}
+
+		for {
+			x += 1
 			tree := get_tree(&info, x, y)
 			if tree > second_tallest {
 				second_tallest = tree
@@ -83,21 +81,19 @@ part1and2 :: proc(input: string) {
 	}
 	
 	for x in 1..<line_len-1 { // check visibility vertically
-
 		tallest, second_tallest: u8
-		y := 0
-
-		for y < line_count {
+		y := line_count - 1
+		for y >= 0 {
 			tree := get_tree(&info, x, y)
 			if tree > tallest {
 				tallest = tree
 				mark_visible(&info, x, y)
 			}
-			y += 1
-		}
-		// y == line_count
-		for {
 			y -= 1
+		}
+
+		for {
+			y += 1
 			tree := get_tree(&info, x, y)
 			if tree > second_tallest {
 				second_tallest = tree
@@ -106,15 +102,6 @@ part1and2 :: proc(input: string) {
 			}
 		}
 	}
-
-	// Print out a cool visualisation of the binary data that shows which trees are visible
-	
-	/* for y in 0..<line_count { */
-	/* 	for x in 0..<lookup_bytes_per_line { */
-	/* 		fmt.printf("%08b", lookup[lookup_bytes_per_line*y + x]) */
-	/* 	} */
-	/* 	fmt.println() */
-	/* } */
 
 	sum := 4 // corners not included, but they are always visible. 
 	for b in lookup {
@@ -142,20 +129,22 @@ part1and2 :: proc(input: string) {
 
 		score := 1
 		
-		for i := 1; true; i += 1 {
+		for i := 1; true; i += 1 { // left
 			if x-i < 0           { score *= i-1; break }
 			if get_tree(info, x-i, y) >= house { score *= i; break }
 		}
-		for i := 1; true; i += 1 {
+
+		for i := 1; true; i += 1 { // right
 			if x+i >= line_len   { score *= i-1; break }
 			if get_tree(info, x+i, y) >= house { score *= i; break }
 		}
 		
-		for i := 1; true; i += 1 {
+		for i := 1; true; i += 1 { // up
 			if y-i < 0           { score *= i-1; break }
 			if get_tree(info, x, y-i) >= house { score *= i; break }
 		}
-		for i := 1; true; i += 1 {
+
+		for i := 1; true; i += 1 { // down
 			if y+i >= line_count { score *= i-1; break }
 			if get_tree(info, x, y+i) >= house { score *= i; break }
 		}

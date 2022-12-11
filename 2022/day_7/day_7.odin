@@ -37,14 +37,15 @@ just_do_the_whole_thing_this_day_is_a_mess :: proc(data: string) {
 	iterator := data
 	
 	aoc_util.iter_lines(&iterator) // Skip line 1, we know the file starts with "$ cd /"
-	base_dir := add_entry(&memory)
-	base_dir^ = Dir_Entry {
+	append(&memory, Dir_Entry {
 		name = "/",
 		type = .Directory,
 		size = 0,
 		content_start = len(memory),
 		content_len   = 0,
-	}
+	})
+	base_dir := &memory[len(memory)-1]
+
 	
 	append(&path, base_dir)
 	
@@ -83,27 +84,24 @@ just_do_the_whole_thing_this_day_is_a_mess :: proc(data: string) {
 		}
 
 		// > Line must be an entry listed by the ls command
-		
-		entry := add_entry(&memory)  // create it
-		cwd.content_len += 1         // add it to the content of the current working directory
 				
 		if line[:3] == "dir" {
 			// > A DIR WAS LISTED
-			entry^ = Dir_Entry {
+			append(&memory, Dir_Entry {
 				name = line[4:],
 				type = .Directory
-			}
-
-			continue next_line
+			})
 		} else {
 			// > A FILE WAS LISTED
 			filesize, int_len := aoc_util.get_int(line)
-			entry^ = Dir_Entry {
+			append(&memory,  Dir_Entry {
 				name = line[int_len+1:],
 				type = .File,
 				size = filesize,
-			}
+			})
 		}
+		
+		cwd.content_len += 1   // extend content of the current working directory to include the entry
 	}
 
 	get_size(base_dir, &memory) // DO NOT REMOVE, this initial call will set all directory sizes
@@ -153,13 +151,6 @@ get_size_of_at_most :: proc(dir: ^Dir_Entry, limit: int, mem: ^[dynamic]Dir_Entr
 	}
 	return size
 }
-
-add_entry :: proc(array: ^$T/[dynamic]$E) -> ^E {
-	i := len(array)
-	resize_dynamic_array(array, i+1)
-	return &array[i]
-}
-
 
 get_size :: proc(entry: ^Dir_Entry, mem: ^[dynamic]Dir_Entry) -> (size: int) {
 	switch entry.type {

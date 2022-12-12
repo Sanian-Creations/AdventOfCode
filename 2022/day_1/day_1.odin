@@ -31,18 +31,8 @@ calculate_calories :: proc(data: string, top_N_calories: []int) -> (total: int) 
 
 		// add to top N calories
 		// use insertion sort
-		N := len(top_N_calories)
-		for nth_best, n in top_N_calories {
-			if current_calories <= nth_best { continue }
 
-			// move everything over, then insert
-			for i in n..<(N-1) {
-				top_N_calories[i+1] = top_N_calories[i]
-			}
-
-			top_N_calories[n] = current_calories
-			break
-		}
+		aoc_util.insert_highest(top_N_calories, current_calories)
 
 		current_calories = 0
 	}

@@ -134,3 +134,18 @@ iter_lines_indexed :: proc(iterator: ^String_Iterator) -> (line: string, index: 
 	return line, index, ok
 }
 
+// Inserts the value in the list if it is higher than a value in it.
+// Assumes the list is sorted high to low. If a value is inserted, everything after it is moved over 1 spot.
+insert_highest :: proc(list: []int, value: int) {
+	for nth_best, n in list {
+		if value <= nth_best { continue }
+
+		// move everything over, then insert
+		for i := len(list)-1; i > n; i -= 1 {
+			list[i] = list[i-1]
+		}
+
+		list[n] = value
+		break
+	}
+}

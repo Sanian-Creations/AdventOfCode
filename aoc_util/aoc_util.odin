@@ -108,7 +108,7 @@ get_line :: proc(str: string) -> (line: string, total_len: int) {
 	if i != -1 {
 		// Account for files using \r\n as newline
 		// AoC files all use Unix file format and don't have this problem,
-		// but I like knowing that this code will work on all files.
+		// but files made by myself do have this problem (such as ones I paste the examples into)
 		line = (i > 0 && str[i-1] == '\r') ? str[:i-1] : str[:i]
 		total_len = i+1
 	} else {

@@ -1,4 +1,5 @@
 #import "Basic";
+S :: #import "String";
 File :: #import "File";
 
 // --- Reading the input ---
@@ -18,28 +19,25 @@ read_input :: () -> input := "", ok := false {
 // --- Line iteration ---
 
 // Usage:
-// for :lines str { ... }
-// exposes line, line_u8, line_num (it and it_index are line and line_num)
+// for :lines line, line_num: str { ... }
 
 lines :: (str_: *string, body: Code, flags: For_Flags) #expand {
-	#assert !flags;
+	#assert !flags "No flags suported for iterating by line";
 
 	str := cast([]u8) str_.*; // ensure non-destructive iteration by making local copy
 	`it_index := 0;
 	while str.count > 0 {
 		line_len, adv_by := str.count;
-		for str {
-			if it != #char "\n"  continue;
-			line_len = it_index - cast(int)(it_index > 0 && str[it_index-1] == #char "\r");
-			adv_by   = it_index + 1;
+		for c, ci: str {
+			if c != #char "\n"  continue;
+			line_len = ci - cast(int)(ci > 0 && str[ci-1] == #char "\r");
+			adv_by   = ci + 1;
 			break;
 		}
 
-		`line_u8   := view(str.data, line_len);
-		`it, `line := cast(string) `line_u8;
+		`it := cast(string) view(str.data, line_len);
 		str.data += adv_by; str.count -= adv_by;
-		`it_index += 1;
-		`line_num := it_index;
+		it_index += 1;
 
 		#insert body;
 	}

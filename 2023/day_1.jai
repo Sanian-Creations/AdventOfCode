@@ -12,10 +12,10 @@ part_1 :: (input: string) -> int {
 	}
 
 	total := 0;
-	for :lines input {
+	for :lines line, line_num: input {
 		first_digit, last_digit: u8;
-		for line_u8   if is_digit(it) { first_digit = it; break; }
-		for < line_u8 if is_digit(it) { last_digit  = it; break; }
+		for   cast([]u8) line if is_digit(it) { first_digit = it; break; }
+		for < cast([]u8) line if is_digit(it) { last_digit  = it; break; }
 		value := 10 * digit_to_int(first_digit) + digit_to_int(last_digit);
 		total += value;
 	}
@@ -41,10 +41,10 @@ part_2 :: (input: string) -> int {
 	}
 
 	total := 0;
-	for :lines input {
+	for :lines line, line_num: input {
 		num1, num2: int;
-		for line_u8   if check_digit(it, *num1) || check_spelled_number(line, it_index, *num1) break;
-		for < line_u8 if check_digit(it, *num2) || check_spelled_number(line, it_index, *num2) break;
+		for   cast([]u8) line if check_digit(it, *num1) || check_spelled_number(line, it_index, *num1) break;
+		for < cast([]u8) line if check_digit(it, *num2) || check_spelled_number(line, it_index, *num2) break;
 		value := 10 * num1 + num2;
 		total += value;
 	}

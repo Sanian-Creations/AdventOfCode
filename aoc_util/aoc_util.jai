@@ -76,6 +76,65 @@ example :: (example: string, $proc: (string) -> $T, expected: T, input: string) 
 
 
 
+// --- Datastructures ---
+
+Fixed_Size_Stack :: struct(N: int, T: Type) {
+	// for dynamic stack just use [..], it has all the same features built-in
+	array: [N] T;
+	count: int;
+}
+push :: (stack: *Fixed_Size_Stack, val: stack.T) {
+	stack.*[stack.count] = val; // use builtin bounds check.
+	stack.count += 1;
+}
+pop :: inline (stack: *Fixed_Size_Stack) -> stack.T {
+	defer stack.count -= 1;
+	return stack[stack.count-1];
+}
+operator *[] :: inline (stack: *Fixed_Size_Stack, index: int) -> *stack.T {
+	return *stack.array[index];
+}
+
+
+
+// --- String indexing ---
+
+safe_index :: (str: string, index: int, default: u8 = 0) -> u8 {
+	if index < 0 || index >= str.count return default;
+	return #no_abc str[index];
+}
+
+move_right_while :: inline (str: string, start: int, $proc: (u8) -> bool, $stop_at_last := false) -> int {
+	i := start;
+	#if stop_at_last {
+		while i+1 < str.count && inline proc(#no_abc str[i+1]) { i += 1; }
+	} else {
+		while i < str.count   && inline proc(#no_abc str[i])   { i += 1; }
+	}
+	return i;
+}
+
+move_left_while :: inline (str: string, start: int, $proc: (u8) -> bool, $stop_at_last := false) -> int {
+	i := start;
+	#if stop_at_last {
+		while i > 0  && inline proc(#no_abc str[i-1]) { i -= 1; }
+	} else {
+		while i >= 0 && inline proc(#no_abc str[i])   { i -= 1; }
+	}
+	return i;
+}
+
+find_num_start :: (str: string, from: int) -> int {
+	return move_left_while(str, from, is_digit, stop_at_last = true);
+}
+
+// (non-inclusive)
+find_num_end :: (str: string, from: int) -> int {
+	return move_right_while(str, from, is_digit);
+}
+
+
+
 // --- Slicing & Dicing ---
 
 view :: (data: *$T, count: int) -> []T #expand {

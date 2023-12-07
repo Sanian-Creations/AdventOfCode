@@ -12,7 +12,7 @@ part_1 :: (input: string) -> int {
 	}
 
 	total := 0;
-	for :lines line, line_num: input {
+	for :lines line: input {
 		first_digit, last_digit: u8;
 		for   cast([]u8) line if is_digit(it) { first_digit = it; break; }
 		for < cast([]u8) line if is_digit(it) { last_digit  = it; break; }
@@ -41,7 +41,7 @@ part_2 :: (input: string) -> int {
 	}
 
 	total := 0;
-	for :lines line, line_num: input {
+	for :lines line: input {
 		num1, num2: int;
 		for   cast([]u8) line if check_digit(it, *num1) || check_spelled_number(line, it_index, *num1) break;
 		for < cast([]u8) line if check_digit(it, *num2) || check_spelled_number(line, it_index, *num2) break;

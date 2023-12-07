@@ -37,7 +37,7 @@ part_1 :: (input: string) -> int {
 
 	total := 0;
 
-	for :lines line, line_num: input {
+	for :lines line: input {
 		read_nums(iview(line, win_nums_start, win_nums_end), win_nums);
 		read_nums(iview(line, my_nums_start,  my_nums_end),  my_nums);
 
@@ -70,7 +70,7 @@ part_2 :: (input: string) -> int {
 	nums_buf    := NewArray(win_nums_count + my_nums_count + total_cards_count, int); defer array_free(nums_buf);
 	win_nums    := view(nums_buf, 0, win_nums_count);
 	my_nums     := view(nums_buf, win_nums_count, my_nums_count);
-	extra_cards := view(nums_buf, win_nums_count + my_nums_count -1, total_cards_count + 1); // the -1+1 makes this array 1-indexed so that card numbers are valid indeces.
+	extra_cards := view(nums_buf, win_nums_count + my_nums_count, total_cards_count);
 
 	read_nums :: (nums: string, buf: []int) {
 		// Amount of numbers read is based on the capacity of the buffer
@@ -81,7 +81,7 @@ part_2 :: (input: string) -> int {
 
 	total := 0;
 
-	for :lines line, card_num: input {
+	for :lines line, card_index: input {
 		read_nums(iview(line, win_nums_start, win_nums_end), win_nums);
 		read_nums(iview(line, my_nums_start,  my_nums_end),  my_nums);
 
@@ -91,10 +91,10 @@ part_2 :: (input: string) -> int {
 			if found  winning_nums_count += 1;
 		}
 
-		this_card_count := 1 + extra_cards[card_num];
+		this_card_count := 1 + extra_cards[card_index];
 		for 1..winning_nums_count {
 			// "Cards will never make you copy a card past the end of the table", shouldn't go out of bounds.
-			extra_cards[card_num + it] += this_card_count;
+			extra_cards[card_index + it] += this_card_count;
 		}
 
 		total += this_card_count;

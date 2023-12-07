@@ -10,7 +10,7 @@ part_1 :: (input: string) -> int {
 
 	total := 0; // sum of all game numbers which are possible. gamenr = line num
 
-	for :lines line, line_num: input {
+	for :lines line, line_index: input {
 		advance(*line, S.find_index_from_left(line, #char ":") + 2);
 
 		// Consume every string "N color" on this line. Skip to the next line if an invalid amount of cubes is found.
@@ -29,7 +29,7 @@ part_1 :: (input: string) -> int {
 			}
 
 			if line.count == 0 { // end of line
-				total += line_num;
+				total += line_index + 1;
 				continue line;
 			}
 
@@ -44,7 +44,7 @@ part_2 :: (input: string) -> int {
 
 	total := 0; // sum of all game numbers which are possible. gamenr = line num
 
-	for :lines line, line_num: input {
+	for :lines line: input {
 		advance(*line, S.find_index_from_left(line, #char ":") + 2);
 
 		// Consume every string "N color" on this line. Remember the biggest value of each color.

@@ -24,23 +24,20 @@ read_input :: () -> input := "", ok := false {
 lines :: (str_: *string, body: Code, flags: For_Flags) #expand {
 	#assert !flags "No flags suported for iterating by line";
 
-	str := cast([]u8) str_.*; // ensure non-destructive iteration by making local copy
-	`it_index := 0;
+	str := str_.*; // ensure non-destructive iteration by making local copy
+	`it_index := -1;
 	while str.count > 0 {
-		line_len, adv_by := str.count;
-		for c, ci: str {
-			if c != #char "\n"  continue;
-			line_len = ci - cast(int)(ci > 0 && str[ci-1] == #char "\r");
-			adv_by   = ci + 1;
-			break;
-		}
-
-		`it := cast(string) view(str.data, line_len);
-		str.data += adv_by; str.count -= adv_by;
 		it_index += 1;
-
+		`it := consume_one_line(*str);
 		#insert body;
 	}
+}
+
+consume_one_line :: (str: *string, $support_crlf := true) -> line: string #no_abc {
+	len := S.find_index_from_left(str.*, #char "\n") + 1; // length including line feed
+	trimmed_len := len - ifx support_crlf && len > 1 && str.*[len - 2] == #char "\r" then 2 else 1; // length excluding line feed
+	defer { str.data += len; str.count -= len; }
+	return view(str, 0, trimmed_len);
 }
 
 

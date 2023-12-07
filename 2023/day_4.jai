@@ -22,7 +22,7 @@ part_1 :: (input: string) -> int {
 	nums_buf := NewArray(win_nums_count + my_nums_count*2 + 1, int); defer array_free(nums_buf);
 	win_nums := view(nums_buf, 0, win_nums_count);
 	my_nums  := view(nums_buf, win_nums_count, my_nums_count);
-	points   := view(nums_buf, my_nums_count + win_nums_count, my_nums_count + 1);
+	points   := view(nums_buf, win_nums_count + my_nums_count);
 
 	// pre-calc points
 	points[1] = 1;

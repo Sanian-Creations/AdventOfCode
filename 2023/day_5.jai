@@ -1,9 +1,7 @@
 main :: () {
-	input, ok := read_input();
-	if !ok return;
-
-	print_expr(part_1(input));
-	print_expr(part_2(input));
+	input := read_input();
+	print("Part 1: %\n", part_1(input)); // Part 1: 462648396
+	print("Part 2: %\n", part_2(input)); // Part 2: 2520479
 }
 
 Range :: struct {

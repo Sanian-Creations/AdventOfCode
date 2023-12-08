@@ -6,14 +6,17 @@ string_to_int :: #bake_arguments Basic.string_to_int(base = 10, T = int);
 
 // --- Reading the input ---
 
-read_input :: () -> input := "", ok := false {
+read_input :: () -> input: string #expand {
 	args := get_command_line_arguments();
 	if args.count != 2 {
 		print("Please specify the input file as the only argument:\nday_N.exe input_N.txt\n");
-		return;
+		`return;
 	}
+
 	input, ok := File.read_entire_file(args[1]);
-	return input, ok;
+	if !ok `return;
+
+	return input;
 }
 
 
@@ -39,7 +42,7 @@ consume_one_line :: (str: *string, $support_crlf := true) -> line: string #no_ab
 	len := S.find_index_from_left(str.*, #char "\n") + 1; // length including line feed
 	trimmed_len := len - ifx support_crlf && len > 1 && str.*[len - 2] == #char "\r" then 2 else 1; // length excluding line feed
 	defer { str.data += len; str.count -= len; }
-	return view(str, 0, trimmed_len);
+	return view(str, 0, trimmed_len, bounds_check=false);
 }
 
 
@@ -48,11 +51,11 @@ consume_one_line :: (str: *string, $support_crlf := true) -> line: string #no_ab
 
 print_expr :: ($c: Code) #expand {
 	fmt_string :: #run -> string {
-		#import "Compiler";
-		#import "Program_Print";
+		C :: #import "Compiler";
+		PP :: #import "Program_Print";
 
 		sb: String_Builder;
-		print_expression(*sb, compiler_get_nodes(c));
+		PP.print_expression(*sb, C.compiler_get_nodes(c));
 		append(*sb, " is %\n");
 
 		return builder_to_string(*sb);
@@ -66,10 +69,11 @@ print_expr :: ($c: Code) #expand {
 // --- Comptime test ---
 
 example :: (example: string, $proc: (string) -> $T, expected: T, input: string) {
+	C :: #import "Compiler";
 	got := proc(input);
 	if got != expected {
 		print("Failed example %: Expected % but got %!\n", example, expected, got);
-		set_build_options_dc(.{do_output = false});
+		C.set_build_options_dc(.{do_output = false});
 	}
 }
 

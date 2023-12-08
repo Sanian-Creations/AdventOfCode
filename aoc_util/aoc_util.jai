@@ -1,6 +1,8 @@
-#import "Basic";
+Basic :: #import "Basic";
+using Basic;
 S :: #import "String";
 File :: #import "File";
+string_to_int :: #bake_arguments Basic.string_to_int(base = 10, T = int);
 
 // --- Reading the input ---
 

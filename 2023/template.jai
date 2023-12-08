@@ -7,7 +7,7 @@ main :: () {
 }
 
 part_1 :: (input: string) -> int {
-	for :lines line, line_num: input {
+	for :lines line, line_index: input {
 
 	}
 	return 0;

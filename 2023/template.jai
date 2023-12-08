@@ -1,9 +1,7 @@
 main :: () {
-	input, ok := read_input();
-	if !ok return;
-
-	print_expr(part_1(input));
-	print_expr(part_2(input));
+	input := read_input();
+	print("Part 1: %\n", part_1(input));
+	print("Part 2: %\n", part_2(input));
 }
 
 part_1 :: (input: string) -> int {
@@ -17,13 +15,13 @@ part_2 :: (input: string) -> int {
 	return 0;
 }
 
-#run example("1", part_1, 0, #string TESTINPUT
 
-TESTINPUT);
+testinput :: #string TESTINPUT
 
-#run example("2", part_2, 0, #string TESTINPUT
+TESTINPUT;
 
-TESTINPUT);
+#run example("1", part_1, 0, testinput);
+#run example("2", part_2, 0, testinput);
 
 
 #load "../aoc_util/aoc_util.jai";

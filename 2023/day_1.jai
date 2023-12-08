@@ -5,50 +5,50 @@ main :: () {
 }
 
 part_1 :: (input: string) -> int {
-	digit_to_int :: (digit: u8) -> int {
-		return digit - #char "0";
-	}
-
 	total := 0;
+
 	for :lines line: input {
-		first_digit, last_digit: u8;
-		for   cast([]u8) line if is_digit(it) { first_digit = it; break; }
-		for < cast([]u8) line if is_digit(it) { last_digit  = it; break; }
-		value := 10 * digit_to_int(first_digit) + digit_to_int(last_digit);
-		total += value;
+		first_num, last_num: int;
+		for   cast([]u8) line if check_digit(it, *first_num) break;
+		for < cast([]u8) line if check_digit(it, *last_num)  break;
+		total += 10 * first_num + last_num;
 	}
 
 	return total;
 }
 
 part_2 :: (input: string) -> int {
-	check_digit :: (char: u8, num: *int) -> bool {
-		if is_digit(char) {
-			num.* = char - #char "0";
-			return true;
-		} else return false;
-	}
-	check_spelled_number :: (line: string, char_index: int, num: *int) -> bool {
-		numbers :: string.["one", "two", "three", "four", "five", "six", "seven", "eight","nine"];
-
-		for numbers if char_index + it.count <= line.count && view(line, char_index, it.count) == it {
-			num.* = it_index + 1;
-			return true;
-		}
-		return false;
-	}
 
 	total := 0;
 	for :lines line: input {
-		num1, num2: int;
-		for   cast([]u8) line if check_digit(it, *num1) || check_spelled_number(line, it_index, *num1) break;
-		for < cast([]u8) line if check_digit(it, *num2) || check_spelled_number(line, it_index, *num2) break;
-		value := 10 * num1 + num2;
-		total += value;
+		first_num, last_num: int;
+		for   cast([]u8) line if check_digit(it, *first_num) || check_spelled_number(line, it_index, *first_num) break;
+		for < cast([]u8) line if check_digit(it, *last_num)  || check_spelled_number(line, it_index, *last_num) break;
+		total += 10 * first_num + last_num;
 	}
 
 	return total;
 }
+
+check_digit :: (char: u8, num: *int) -> bool {
+	if is_digit(char) {
+		num.* = char - #char "0";
+		return true;
+	} else return false;
+}
+
+check_spelled_number :: (line: string, char_index: int, num: *int) -> bool {
+	numbers :: string.["one", "two", "three", "four", "five", "six", "seven", "eight","nine"];
+	for numbers {
+		here := iview(line, char_index, min(char_index + it.count, line.count), false);
+		if it == here {
+			num.* = it_index + 1;
+			return true;
+		}
+	}
+	return false;
+}
+
 
 #run example("1", part_1, 142, #string TESTINPUT
 1abc2

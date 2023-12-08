@@ -23,9 +23,9 @@ part_1 :: (input: string) -> int {
 			if !prev_char_was_digit  num_start = it_index;
 		} else {
 			if prev_char_was_digit {
-				left := num_start - 1;
+				left  := num_start - 1;
 				right := it_index;
-				num := string_to_int(iview(input, num_start, right));
+				num   := string_to_int(iview(input, num_start, right));
 
 				if left > 0 && is_symbol(input[left])             { total += num; continue it; }
 				if right < input.count && is_symbol(input[right]) { total += num; continue it; }
@@ -61,25 +61,25 @@ part_2 :: (input: string) -> int {
 				if !is_digit(input[it]) continue;
 				num_start := find_num_start(input, it);
 				num_end   := find_num_end(input, it + 1);
-				num := string_to_int(iview(input, num_start, num_end));
+				num       := string_to_int(iview(input, num_start, num_end));
 				push(*parts, num);
 				if parts.count == 2 { total += parts[0] * parts[1]; continue cog; }
 				it = num_end; // ensure we don't count the same part twice
 			}
 		}
 
-		left := cog_index - 1;
+		left  := cog_index - 1;
 		right := cog_index + 1;
 
 		if left > 0 && is_digit(input[left]) {
 			num_start := find_num_start(input, left);
-			num := string_to_int(iview(input, num_start, cog_index));
+			num       := string_to_int(iview(input, num_start, cog_index));
 			push(*parts, num);
 		}
 
 		if right < input.count && is_digit(input[right]) {
 			num_end := find_num_end(input, right + 1);
-			num := string_to_int(iview(input, right, num_end));
+			num     := string_to_int(iview(input, right, num_end));
 			push(*parts, num);
 			if parts.count == 2 { total += parts[0] * parts[1]; continue cog; }
 		}
@@ -92,20 +92,8 @@ part_2 :: (input: string) -> int {
 	return total;
 }
 
-#run example("1", part_1, 4361, #string TESTINPUT
-467..114..
-...*......
-..35..633.
-......#...
-617*......
-.....+.58.
-..592.....
-......755.
-...$.*....
-.664.598..
-TESTINPUT);
 
-#run example("2", part_2, 467835, #string TESTINPUT
+testinput :: #string TESTINPUT
 467..114..
 ...*......
 ..35..633.
@@ -116,7 +104,10 @@ TESTINPUT);
 ......755.
 ...$.*....
 .664.598..
-TESTINPUT);
+TESTINPUT;
+
+#run example("1", part_1, 4361, testinput);
+#run example("2", part_2, 467835, testinput);
 
 
 #load "../aoc_util/aoc_util.jai";

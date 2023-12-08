@@ -4,29 +4,6 @@ main :: () {
 	print("Part 2: %\n", part_2(input)); // Part 2: 2520479
 }
 
-Range :: struct {
-	from: int;
-	to:   int;
-}
-Map_Range :: struct {
-	#as using range: Range;
-	mapping: int;
-}
-
-parse_map_range :: inline (line: string) -> Map_Range {
-	num1_end := S.find_index_from_left(line, #char " ");
-	num2_end := S.find_index_from_left(line, #char " ", num1_end+1);
-	dest      := string_to_int(iview(line, 0, num1_end));
-	src       := string_to_int(iview(line, num1_end+1, num2_end));
-	range_len := string_to_int(iview(line, num2_end+1));
-
-	return .{
-		from    = src,
-		to      = src + range_len,
-		mapping = dest - src,
-	};
-}
-
 part_1 :: (input: string) -> int {
 
 	values: [..] int;
@@ -58,18 +35,11 @@ part_1 :: (input: string) -> int {
 	}
 
 	lowest := values[0];
-	for 1..values.count-1 {
-		if values[it] < lowest  lowest = values[it];
-	}
-
+	for 1..values.count-1  if values[it] < lowest  lowest = values[it];
 	return lowest;
 }
 
 part_2 :: (input: string) -> int {
-
-	intersects :: (a: Range, b: Range) -> bool {
-		return a.from < b. to && a.to > b.from;
-	}
 
 	ranges: [..] Range;
 
@@ -125,12 +95,38 @@ part_2 :: (input: string) -> int {
 	}
 
 	lowest := ranges[0].from;
-	for 1..ranges.count-1 {
-		if ranges[it].from < lowest then lowest = ranges[it].from;
-	}
-
+	for 1..ranges.count-1  if ranges[it].from < lowest then lowest = ranges[it].from;
 	return lowest;
 }
+
+Range :: struct {
+	from: int;
+	to:   int;
+}
+
+Map_Range :: struct {
+	#as using range: Range;
+	mapping: int;
+}
+
+parse_map_range :: inline (line: string) -> Map_Range {
+	num1_end := S.find_index_from_left(line, #char " ");
+	num2_end := S.find_index_from_left(line, #char " ", num1_end+1);
+	dest      := string_to_int(iview(line, 0, num1_end));
+	src       := string_to_int(iview(line, num1_end+1, num2_end));
+	range_len := string_to_int(iview(line, num2_end+1));
+
+	return .{
+		from    = src,
+		to      = src + range_len,
+		mapping = dest - src,
+	};
+}
+
+intersects :: (a: Range, b: Range) -> bool {
+	return a.from < b. to && a.to > b.from;
+}
+
 
 testinput :: #string TESTINPUT
 seeds: 79 14 55 13
@@ -167,6 +163,7 @@ humidity-to-location map:
 60 56 37
 56 93 4
 TESTINPUT;
+
 #run example("1", part_1, 35, testinput);
 #run example("2", part_2, 46, testinput);
 

@@ -4,12 +4,8 @@ main :: () {
 	print("Part 2: %\n", part_2(input)); // Part 2: 34934171
 }
 
-calc_dist :: (racetime: int, btntime: int) -> int {
-	return (racetime - btntime) * btntime;
-}
-
 part_1 :: (input: string) -> int {
-	start_index :: "Distance:  ".count;
+	start_index :: "Distance: ".count;
 	line1 := view(consume_one_line(*input), start_index);
 	line2 := view(consume_one_line(*input), start_index);
 
@@ -35,7 +31,6 @@ part_1 :: (input: string) -> int {
 		}
 
 		margin := race_time - max * 2 + 1;
-
 		total *= margin;
 	}
 
@@ -53,7 +48,7 @@ part_2 :: (input: string) -> int {
 		return total;
 	}
 
-	start_index :: "Distance:  ".count;
+	start_index :: "Distance: ".count;
 	race_time   := parse_as_one_number(view(consume_one_line(*input), start_index));
 	record_dist := parse_as_one_number(view(consume_one_line(*input), start_index));
 
@@ -67,10 +62,13 @@ part_2 :: (input: string) -> int {
 			else min = btntime_guess;
 	}
 
-	margin := race_time - max * 2 + 1;
-
-	return margin;
+	return race_time - max * 2 + 1;
 }
+
+calc_dist :: (racetime: int, btntime: int) -> int {
+	return (racetime - btntime) * btntime;
+}
+
 
 testinput :: #string TESTINPUT
 Time:      7  15   30

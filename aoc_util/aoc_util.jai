@@ -40,11 +40,14 @@ lines :: (str_: *string, body: Code, flags: For_Flags) #expand {
 
 consume_one_line :: (str: *string, $support_crlf := true) -> line: string #no_abc {
 	len := S.find_index_from_left(str.*, #char "\n") + 1; // length including line feed
-	trimmed_len := len - ifx support_crlf && len > 1 && str.*[len - 2] == #char "\r" then 2 else 1; // length excluding line feed
 	defer { str.data += len; str.count -= len; }
-	return view(str, 0, trimmed_len, bounds_check=false);
+	return view(str, 0, len - ifx support_crlf && len > 1 && str.*[len - 2] == #char "\r" then 2 else 1, false);
 }
 
+first_line :: (str: string, $support_crlf := true) -> line: string #no_abc {
+	len := S.find_index_from_left(str, #char "\n") + 1; // length including line feed
+	return view(str, 0, len - ifx support_crlf && len > 1 && str[len - 2] == #char "\r" then 2 else 1, false);
+}
 
 
 // --- Quick and easy printing ---
@@ -216,7 +219,7 @@ iview_assertions     :: () #expand { _iview_assertions    (`v, `from, `to,    `b
 view_assertions      :: () #expand { _view_assertions     (`v, `from, `count, `bounds_check, `loc); }
 view_from_assertions :: () #expand { _view_from_assertions(`v, `from,         `bounds_check, `loc); }
 
-ASSERT_MSG :: "Can't make view [%, %), arr.count = %\n";
+ASSERT_MSG :: "Couldn't make view [%, %) on array of length %\n";
 
 _iview_assertions :: (v: $Arr, from: int, to: int, $bounds_check: bool, $loc: Source_Code_Location) #expand {
 	#if is_constant(0    <= from)    #assert 0    <= from;

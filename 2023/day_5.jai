@@ -4,7 +4,8 @@ main :: () {
 	print("Part 2: %\n", part_2(input)); // Part 2: 2520479
 }
 
-part_1 :: (input: string) -> int {
+part_1 :: (input__: string) -> int {
+	input := input__;
 
 	values: [..] int;
 
@@ -39,7 +40,8 @@ part_1 :: (input: string) -> int {
 	return lowest;
 }
 
-part_2 :: (input: string) -> int {
+part_2 :: (input__: string) -> int {
+	input := input__;
 
 	ranges: [..] Range;
 

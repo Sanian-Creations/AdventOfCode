@@ -4,7 +4,9 @@ main :: () {
 	print("Part 2: %\n", part_2(input)); // Part 2: 34934171
 }
 
-part_1 :: (input: string) -> int {
+part_1 :: (input__: string) -> int {
+	input := input__;
+
 	start_index :: "Distance: ".count;
 	line1 := view(consume_one_line(*input), start_index);
 	line2 := view(consume_one_line(*input), start_index);
@@ -37,7 +39,9 @@ part_1 :: (input: string) -> int {
 	return total;
 }
 
-part_2 :: (input: string) -> int {
+part_2 :: (input__: string) -> int {
+	input := input__;
+
 	parse_as_one_number :: (str: string) -> int {
 		total := 0;
 		multiplier := 1; // 1, 10, 100 etc

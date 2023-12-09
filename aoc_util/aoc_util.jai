@@ -79,6 +79,23 @@ example :: (example: string, $proc: (string) -> $T, expected: T, input: string) 
 
 
 
+// --- Quick Mafs ---
+
+gcd :: (x: int, y: int) -> int #must {
+	x, y := x, y;
+	while y != 0 {
+		x %= y;
+		x, y = y, x;
+	}
+	return ifx x < 0 then -x else x;
+}
+
+lcm :: (x: int, y: int) -> int #must {
+	return x / gcd(x, y) * y;
+}
+
+
+
 // --- Datastructures ---
 
 Fixed_Size_Stack :: struct(N: int, T: Type) {

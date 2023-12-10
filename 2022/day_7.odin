@@ -3,7 +3,7 @@ package adventofcode
 import "core:fmt"
 import "core:strings"
 import "core:runtime"
-import "../../aoc_util"
+import "../aoc_util"
 
 main :: proc() {
 	data, ok := aoc_util.read_input()

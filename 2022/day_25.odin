@@ -1,7 +1,7 @@
 package aoc
 
 import "core:fmt"
-import "../../aoc_util"
+import "../aoc_util"
 
 main :: proc() {
 	/* test() */

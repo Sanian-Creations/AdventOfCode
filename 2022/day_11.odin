@@ -4,7 +4,7 @@ import "core:fmt"
 import "core:strconv"
 import "core:runtime"
 import "core:math"
-import "../../aoc_util"
+import "../aoc_util"
 
 main :: proc() {
 	data, ok := aoc_util.read_input()

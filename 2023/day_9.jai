@@ -97,4 +97,4 @@ TESTINPUT;
 #run example("2", part_2, 2, testinput);
 
 
-#load "../aoc_util/aoc_util.jai";
+#load "../aoc_util.jai";

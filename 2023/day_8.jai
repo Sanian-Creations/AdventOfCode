@@ -140,4 +140,4 @@ XXX = (XXX, XXX)
 TESTINPUT);
 
 
-#load "../aoc_util/aoc_util.jai";
+#load "../aoc_util.jai";

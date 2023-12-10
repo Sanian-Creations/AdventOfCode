@@ -68,4 +68,4 @@ zoneight234
 TESTINPUT);
 
 
-#load "../aoc_util/aoc_util.jai";
+#load "../aoc_util.jai";

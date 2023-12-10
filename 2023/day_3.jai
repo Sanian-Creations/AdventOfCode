@@ -110,4 +110,4 @@ TESTINPUT;
 #run example("2", part_2, 467835, testinput);
 
 
-#load "../aoc_util/aoc_util.jai";
+#load "../aoc_util.jai";

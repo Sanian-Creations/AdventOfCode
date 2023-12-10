@@ -124,4 +124,4 @@ TESTINPUT;
 
 
 Sort :: #import "Sort";
-#load "../aoc_util/aoc_util.jai";
+#load "../aoc_util.jai";

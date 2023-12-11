@@ -20,8 +20,8 @@ testinput :: #string TESTINPUT
 
 TESTINPUT;
 
-#run example("1", part_1, 0, testinput);
-#run example("2", part_2, 0, testinput);
+#run example("1", 0, part_1(testinput));
+#run example("2", 0, part_2(testinput));
 
 
 #load "../aoc_util.jai";

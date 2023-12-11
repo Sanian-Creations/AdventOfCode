@@ -49,22 +49,44 @@ first_line :: (str: string, $support_crlf := true) -> line: string #no_abc {
 	return view(str, 0, len - ifx support_crlf && len > 1 && str[len - 2] == #char "\r" then 2 else 1, false);
 }
 
+Text_Grid :: struct {
+	text_ptr: *u8;
+	height:   int;
+	width:    int;
+	line_len: int;
+}
+
+text_grid :: (text: string) -> Text_Grid {
+	using tg: Text_Grid;
+	text_ptr = text.data;
+	line_len = S.find_index_from_left(text, #char "\n") + 1;
+	assert(line_len != 0); // -1 got returned
+	width    = line_len - ifx line_len > 1 && text[line_len - 2] == #char "\r" then 2 else 1;
+	height   = text.count / line_len;
+	return tg;
+}
+
+// returns 0 if out of bounds.
+get :: (using tg: Text_Grid, row: int, col: int) -> u8 {
+	if col < 0 || col >= width  return 0;
+	if row < 0 || row >= height return 0;
+	return text_ptr[row * line_len + col];
+}
+
 
 // --- Quick and easy printing ---
 
 print_expr :: ($c: Code) #expand {
-	fmt_string :: #run -> string {
+	expr_string :: #run -> string {
 		C :: #import "Compiler";
 		PP :: #import "Program_Print";
 
 		sb: String_Builder;
 		PP.print_expression(*sb, C.compiler_get_nodes(c));
-		append(*sb, " is %\n");
 
 		return builder_to_string(*sb);
 	}
-
-	print(fmt_string, #insert c);
+	print("% is %\n", expr_string, #insert c);
 }
 
 

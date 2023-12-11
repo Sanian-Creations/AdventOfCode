@@ -17,10 +17,10 @@ part_1 :: (input: string) -> int {
 	win_nums_count := (win_nums_end - win_nums_start + 1) / 3;
 	my_nums_count  := (my_nums_end  - my_nums_start  + 1) / 3;
 
-	nums_buf := NewArray(win_nums_count + my_nums_count*2 + 1, int); defer array_free(nums_buf);
-	win_nums := view(nums_buf, 0, win_nums_count);
-	my_nums  := view(nums_buf, win_nums_count, my_nums_count);
-	points   := view(nums_buf, win_nums_count + my_nums_count);
+	win_nums := NewArray(win_nums_count + my_nums_count*2 + 1, int);
+	points   := chop_off_end(*win_nums, my_nums_count + 1);
+	my_nums  := chop_off_end(*win_nums, my_nums_count);
+	defer array_free(win_nums);
 
 	// pre-calc points
 	points[1] = 1;
@@ -65,10 +65,10 @@ part_2 :: (input: string) -> int {
 
 	total_cards_count := input.count / (line_end + 1);
 
-	nums_buf    := NewArray(win_nums_count + my_nums_count + total_cards_count, int); defer array_free(nums_buf);
-	win_nums    := view(nums_buf, 0, win_nums_count);
-	my_nums     := view(nums_buf, win_nums_count, my_nums_count);
-	extra_cards := view(nums_buf, win_nums_count + my_nums_count, total_cards_count);
+	win_nums    := NewArray(win_nums_count + my_nums_count + total_cards_count, int);
+	extra_cards := chop_off_end(*win_nums, total_cards_count);
+	my_nums     := chop_off_end(*win_nums, my_nums_count);
+	defer array_free(win_nums);
 
 	read_nums :: (nums: string, buf: []int) {
 		// Amount of numbers read is based on the capacity of the buffer

@@ -15,9 +15,10 @@ part_1 :: (input: string) -> int {
 
 	while 1 {
 		distance += 1;
-		row += s8.[-1,0,1,0][rot];
-		col += s8.[0,1,0,-1][rot];
-
+		#no_abc {
+			row += #no_abc s8.[-1,0,1,0][rot];
+			col += #no_abc s8.[0,1,0,-1][rot];
+		}
 		current_char = get(grid, row, col);
 		if current_char == #char "S" break;
 		rot = turn(current_char, rot);
@@ -39,9 +40,10 @@ part_2 :: (input: string) -> int {
 	pipe_grid[row * grid.width + col] = start_pipe;
 
 	while 1 {
-		row += s8.[-1,0,1,0][rot];
-		col += s8.[0,1,0,-1][rot];
-
+		#no_abc {
+			row += #no_abc s8.[-1,0,1,0][rot];
+			col += #no_abc s8.[0,1,0,-1][rot];
+		}
 		current_char = get(grid, row, col);
 		if current_char == #char "S" break;
 		rot = turn(current_char, rot);
@@ -87,9 +89,9 @@ char_to_pipe :: (c: u8) -> Pipe {
 infer_pipe_shape :: (grid: Text_Grid, row: int, col: int) -> Pipe {
 	pipe: Pipe;
 	if char_to_pipe(get(grid, row - 1, col)) & .DOWN  then pipe |= .UP;
+	if char_to_pipe(get(grid, row + 1, col)) & .UP    then pipe |= .DOWN;
 	if char_to_pipe(get(grid, row, col - 1)) & .RIGHT then pipe |= .LEFT;
 	if char_to_pipe(get(grid, row, col + 1)) & .LEFT  then pipe |= .RIGHT;
-	if char_to_pipe(get(grid, row + 1, col)) & .UP    then pipe |= .DOWN;
 	return pipe;
 }
 

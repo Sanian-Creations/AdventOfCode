@@ -119,8 +119,8 @@ KTJJT 220
 QQQJA 483
 TESTINPUT;
 
-#run example("1", part_1, 6440, testinput);
-#run example("2", part_2, 5905, testinput);
+#run example("1", 6440, part_1(testinput));
+#run example("2", 5905, part_2(testinput));
 
 
 Sort :: #import "Sort";

@@ -166,8 +166,8 @@ humidity-to-location map:
 56 93 4
 TESTINPUT;
 
-#run example("1", part_1, 35, testinput);
-#run example("2", part_2, 46, testinput);
+#run example("1", 35, part_1(testinput));
+#run example("2", 46, part_2(testinput));
 
 
 #load "../aoc_util.jai";

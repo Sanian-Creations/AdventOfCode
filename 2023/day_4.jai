@@ -111,8 +111,8 @@ Card 5: 87 83 26 28 32 | 88 30 70 12 93 22 82 36
 Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11
 TESTINPUT;
 
-#run example("1", part_1, 13, testinput);
-#run example("2", part_2, 30, testinput);
+#run example("1", 13, part_1(testinput));
+#run example("2", 30, part_2(testinput));
 
 
 #load "../aoc_util.jai";

@@ -50,14 +50,14 @@ check_spelled_number :: (line: string, char_index: int, num: *int) -> bool {
 }
 
 
-#run example("1", part_1, 142, #string TESTINPUT
+#run example("1", 142, part_1(#string TESTINPUT
 1abc2
 pqr3stu8vwx
 a1b2c3d4e5f
 treb7uchet
-TESTINPUT);
+TESTINPUT));
 
-#run example("2", part_2, 281, #string TESTINPUT
+#run example("2", 281, part_2(#string TESTINPUT
 two1nine
 eightwothree
 abcone2threexyz
@@ -65,7 +65,7 @@ xtwone3four
 4nineeightseven2
 zoneight234
 7pqrstsixteen
-TESTINPUT);
+TESTINPUT));
 
 
 #load "../aoc_util.jai";

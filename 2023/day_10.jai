@@ -113,23 +113,23 @@ Pipe :: enum_flags u8 { // enum, can point in multiple directions at once
 }
 
 
-#run example("1a", part_1, 4, #string TESTINPUT
+#run example("1a", 4, part_1(#string TESTINPUT
 .....
 .S-7.
 .|.|.
 .L-J.
 .....
-TESTINPUT);
+TESTINPUT));
 
-#run example("1b", part_1, 8, #string TESTINPUT
+#run example("1b", 8, part_1(#string TESTINPUT
 ..F7.
 .FJ|.
 SJ.L7
 |F--J
 LJ...
-TESTINPUT);
+TESTINPUT));
 
-#run example("2a", part_2, 4, #string TESTINPUT
+#run example("2a", 4, part_2(#string TESTINPUT
 ...........
 .S-------7.
 .|F-----7|.
@@ -139,9 +139,9 @@ TESTINPUT);
 .|..|.|..|.
 .L--J.L--J.
 ...........
-TESTINPUT);
+TESTINPUT));
 
-#run example("2b", part_2, 4, #string TESTINPUT
+#run example("2b", 4, part_2(#string TESTINPUT
 ..........
 .S------7.
 .|F----7|.
@@ -151,9 +151,9 @@ TESTINPUT);
 .|..||..|.
 .L--JL--J.
 ..........
-TESTINPUT);
+TESTINPUT));
 
-#run example("2c", part_2, 8, #string TESTINPUT
+#run example("2c", 8, part_2(#string TESTINPUT
 .F----7F7F7F7F-7....
 .|F--7||||||||FJ....
 .||.FJ||||||||L7....
@@ -164,9 +164,9 @@ L--J.L7...LJS7F-7L7.
 .....|FJLJ|FJ|F7|.LJ
 ....FJL-7.||.||||...
 ....L---J.LJ.LJLJ...
-TESTINPUT);
+TESTINPUT));
 
-#run example("2d", part_2, 10, #string TESTINPUT
+#run example("2d", 10, part_2(#string TESTINPUT
 FF7FSF7F7F7F7F7F---7
 L|LJ||||||||||||F--J
 FL-7LJLJ||||||LJL-77
@@ -177,7 +177,7 @@ L---JF-JLJ.||-FJLJJ7
 7-L-JL7||F7|L7F-7F7|
 L.L7LFJ|||||FJL7||LJ
 L7JLJL-JLJLJL--JLJ.L
-TESTINPUT);
+TESTINPUT));
 
 
 #load "../aoc_util.jai";

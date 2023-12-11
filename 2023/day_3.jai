@@ -106,8 +106,8 @@ testinput :: #string TESTINPUT
 .664.598..
 TESTINPUT;
 
-#run example("1", part_1, 4361, testinput);
-#run example("2", part_2, 467835, testinput);
+#run example("1", 4361, part_1(testinput));
+#run example("2", 467835, part_2(testinput));
 
 
 #load "../aoc_util.jai";

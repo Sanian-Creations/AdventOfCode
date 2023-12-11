@@ -79,8 +79,8 @@ Time:      7  15   30
 Distance:  9  40  200
 TESTINPUT;
 
-#run example("1", part_1, 288, testinput);
-#run example("2", part_2, 71503, testinput);
+#run example("1", 288, part_1(testinput));
+#run example("2", 71503, part_2(testinput));
 
 
 #load "../aoc_util.jai";

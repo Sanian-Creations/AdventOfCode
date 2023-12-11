@@ -93,9 +93,8 @@ print_expr :: ($c: Code) #expand {
 
 // --- Comptime test ---
 
-example :: (example: string, $proc: (string) -> $T, expected: T, input: string) {
+example :: (example: string, expected: int, got: int) {
 	C :: #import "Compiler";
-	got := proc(input);
 	if got != expected {
 		print("Failed example %: Expected % but got %!\n", example, expected, got);
 		C.set_build_options_dc(.{do_output = false});

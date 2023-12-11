@@ -82,8 +82,8 @@ Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
 Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
 TESTINPUT;
 
-#run example("1", part_1, 8, testinput);
-#run example("2", part_2, 2286, testinput);
+#run example("1", 8, part_1(testinput));
+#run example("2", 2286, part_2(testinput));
 
 
 #load "../aoc_util.jai";

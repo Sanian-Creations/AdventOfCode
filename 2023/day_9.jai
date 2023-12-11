@@ -93,8 +93,8 @@ testinput :: #string TESTINPUT
 10 13 16 21 30 45
 TESTINPUT;
 
-#run example("1", part_1, 114, testinput);
-#run example("2", part_2, 2, testinput);
+#run example("1", 114, part_1(testinput));
+#run example("2", 2, part_2(testinput));
 
 
 #load "../aoc_util.jai";

@@ -118,15 +118,15 @@ left ::  (line_start: *u8) -> [3]u8 #expand { return << cast(*[3]u8) (line_start
 right :: (line_start: *u8) -> [3]u8 #expand { return << cast(*[3]u8) (line_start + "AAA = (AAA, ".count); }
 
 
-#run example("1", part_1, 6, #string TESTINPUT
+#run example("1", 6, part_1(#string TESTINPUT
 LLR
 
 AAA = (BBB, BBB)
 BBB = (AAA, ZZZ)
 ZZZ = (ZZZ, ZZZ)
-TESTINPUT);
+TESTINPUT));
 
-#run example("2", part_2, 6, #string TESTINPUT
+#run example("2", 6, part_2(#string TESTINPUT
 LR
 
 11A = (11B, XXX)
@@ -137,7 +137,7 @@ LR
 22C = (22Z, 22Z)
 22Z = (22B, 22B)
 XXX = (XXX, XXX)
-TESTINPUT);
+TESTINPUT));
 
 
 #load "../aoc_util.jai";

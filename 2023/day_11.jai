@@ -12,30 +12,23 @@ same_calculation :: (input: string, empty_space_multiplier: int) -> int {
 
 	{
 		grid := text_grid(input);
-		col_has_galaxies := NewArray(grid.width + grid.height, bool); defer array_free(col_has_galaxies);
-		row_has_galaxies := chop_off_end(*col_has_galaxies, grid.height);
+		row_map := NewArray(grid.height + grid.width, int); defer array_free(row_map);
+		col_map := chop_off_end(*row_map, grid.width);
 
-
-		for row: 0..grid.height-1 {
-			for col: 0..grid.width-1 {
-				if get(grid, row, col) == #char "#" {
-					col_has_galaxies[col] = true;
-					row_has_galaxies[row] = true;
-				}
+		for row: 0..grid.height-1 for col: 0..grid.width-1 {
+			if get(grid, row, col, false) == #char "#" {
+				col_map[col] = 1;
+				row_map[row] = 1;
+				array_add(*galaxies, .{row, col});
 			}
 		}
 
-		add_offset := empty_space_multiplier-1;
-		row_offset := 0;
-		for row: 0..grid.height-1 {
-			if !row_has_galaxies[row] { row_offset += add_offset; continue; }
-			col_offset := 0;
-			for col: 0..grid.width-1 {
-				if !col_has_galaxies[col] { col_offset += add_offset; continue; }
-				if get(grid, row, col) == #char "#" {
-					array_add(*galaxies, .{row + row_offset, col + col_offset});
-				}
-			}
+		{ prev := 0; for * row_map { prev, it.* = prev + ifx it.* then 1 else empty_space_multiplier; } }
+		{ prev := 0; for * col_map { prev, it.* = prev + ifx it.* then 1 else empty_space_multiplier; } }
+
+		for * galaxies {
+			it.*.row = row_map[it.row];
+			it.*.col = col_map[it.col];
 		}
 	}
 

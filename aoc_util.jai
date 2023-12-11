@@ -67,9 +67,9 @@ text_grid :: (text: string) -> Text_Grid {
 }
 
 // returns 0 if out of bounds.
-get :: (using tg: Text_Grid, row: int, col: int) -> u8 {
-	if col < 0 || col >= width  return 0;
-	if row < 0 || row >= height return 0;
+get :: (using tg: Text_Grid, row: int, col: int, $bounds_check := true) -> u8 {
+	#if bounds_check { if col < 0 || col >= width  return 0; }
+	#if bounds_check { if row < 0 || row >= height return 0; }
 	return text_ptr[row * line_len + col];
 }
 

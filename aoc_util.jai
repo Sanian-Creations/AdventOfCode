@@ -122,6 +122,12 @@ abs :: inline (num: int) -> int {
 	return ifx num < 0 then -num else num;
 }
 
+sum :: inline (arr: []$T) -> int {
+	total := 0;
+	for arr total += xx it;
+	return total;
+}
+
 
 
 // --- Datastructures ---
@@ -143,10 +149,15 @@ operator *[] :: inline (stack: *Fixed_Size_Stack, index: int) -> *stack.T {
 	return *stack.array[index];
 }
 
+
+
+// --- Arrays ---
+
 chop_off_end :: (source: *[]$T, len: int) -> []T {
 	defer source.count -= len;
 	return view_from(source, source.count - len);
 }
+
 
 
 // --- String indexing ---

@@ -9,7 +9,7 @@ part_1 :: (input__: string) -> int {
 
 	values: [..] int;
 
-	first_line := consume_one_line(*input);
+	first_line := consume_line(*input);
 	advance(*first_line, "seeds:".count);
 	while first_line {
 		num, ok, first_line= := string_to_int(first_line);
@@ -17,12 +17,12 @@ part_1 :: (input__: string) -> int {
 	}
 
 	while input.count { // there must be a next stage
-		consume_one_line(*input); // empty line
-		consume_one_line(*input); // header "x-to-y map:"
+		consume_line(*input); // empty line
+		consume_line(*input); // header "x-to-y map:"
 
 		mapped_count := 0; // this many values are successfully mapped, and should not be mapped again this stage
 		while input.count && is_digit(input[0]) {
-			mrange := parse_map_range(consume_one_line(*input));
+			mrange := parse_map_range(consume_line(*input));
 
 			for mapped_count .. values.count - 1 {
 				v := values[it];
@@ -45,7 +45,7 @@ part_2 :: (input__: string) -> int {
 
 	ranges: [..] Range;
 
-	first_line := consume_one_line(*input);
+	first_line := consume_line(*input);
 	advance(*first_line, "seeds:".count);
 	while first_line {
 		num1, _, first_line= := string_to_int(first_line);
@@ -54,12 +54,12 @@ part_2 :: (input__: string) -> int {
 	}
 
 	while input.count { // there must be a next stage
-		consume_one_line(*input); // empty line
-		consume_one_line(*input); // "x-to-y map:"
+		consume_line(*input); // empty line
+		consume_line(*input); // "x-to-y map:"
 
 		mapped_count := 0; // this many ranges are successfully mapped, and should not be mapped again this stage
 		while input.count && is_digit(input[0]) {
-			mrange := parse_map_range(consume_one_line(*input));
+			mrange := parse_map_range(consume_line(*input));
 
 			for mapped_count .. ranges.count - 1 { // skip past the ranges that are mapped, start at the first index that is not yet mapped.
 				u := ranges[it];

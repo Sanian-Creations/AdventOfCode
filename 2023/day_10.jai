@@ -5,7 +5,7 @@ main :: () {
 }
 
 part_1 :: (input: string) -> int {
-	grid := text_grid(input);
+	grid := grid_view(input);
 	row, col := find_S(input, grid.line_len);
 	start_pipe := infer_pipe_shape(grid, row, col);
 
@@ -28,7 +28,7 @@ part_1 :: (input: string) -> int {
 }
 
 part_2 :: (input: string) -> int {
-	grid := text_grid(input);
+	grid := grid_view(input);
 	row, col := find_S(input, grid.line_len);
 	start_pipe := infer_pipe_shape(grid, row, col);
 
@@ -86,7 +86,7 @@ char_to_pipe :: (c: u8) -> Pipe {
 	}
 }
 
-infer_pipe_shape :: (grid: Text_Grid, row: int, col: int) -> Pipe {
+infer_pipe_shape :: (grid: Text_Grid_View, row: int, col: int) -> Pipe {
 	pipe: Pipe;
 	if char_to_pipe(get(grid, row - 1, col)) & .DOWN  then pipe |= .UP;
 	if char_to_pipe(get(grid, row + 1, col)) & .UP    then pipe |= .DOWN;

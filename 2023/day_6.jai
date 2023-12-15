@@ -8,8 +8,8 @@ part_1 :: (input__: string) -> int {
 	input := input__;
 
 	start_index :: "Distance: ".count;
-	line1 := view(consume_one_line(*input), start_index);
-	line2 := view(consume_one_line(*input), start_index);
+	line1 := view(consume_line(*input), start_index);
+	line2 := view(consume_line(*input), start_index);
 
 	total := 1;
 	while 1 {
@@ -53,8 +53,8 @@ part_2 :: (input__: string) -> int {
 	}
 
 	start_index :: "Distance: ".count;
-	race_time   := parse_as_one_number(view(consume_one_line(*input), start_index));
-	record_dist := parse_as_one_number(view(consume_one_line(*input), start_index));
+	race_time   := parse_as_one_number(view(consume_line(*input), start_index));
+	record_dist := parse_as_one_number(view(consume_line(*input), start_index));
 
 	min := 0;
 	max := race_time/2;

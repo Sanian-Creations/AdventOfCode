@@ -7,8 +7,8 @@ main :: () {
 part_1 :: (input__: string) -> int {
 	input := input__; // param is immutable
 
-	instructions := consume_one_line(*input);
-	consume_one_line(*input);
+	instructions := consume_line(*input);
+	consume_line(*input);
 
 	line_len    := S.find_index_from_left(input, #char "\n") + 1;
 	node_count := input.count / line_len;
@@ -44,8 +44,8 @@ part_1 :: (input__: string) -> int {
 part_2 :: (input__: string) -> int {
 	input := input__; // param is immutable
 
-	instructions := consume_one_line(*input);
-	consume_one_line(*input);
+	instructions := consume_line(*input);
+	consume_line(*input);
 
 	line_len   := S.find_index_from_left(input, #char "\n") + 1;
 	node_count := input.count / line_len;

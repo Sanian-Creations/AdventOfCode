@@ -24,8 +24,7 @@ read_input :: () -> input: string #expand {
 // --- Line iteration ---
 
 // Usage:
-// for :lines line, line_num: str { ... }
-
+// for :lines line, line_index: str { ... }
 lines :: (str_: *string, body: Code, flags: For_Flags) #expand {
 	#assert !flags "No flags suported for iterating by line";
 
@@ -33,45 +32,154 @@ lines :: (str_: *string, body: Code, flags: For_Flags) #expand {
 	`it_index := -1;
 	while str.count > 0 {
 		it_index += 1;
-		`it := consume_one_line(*str);
+		`it := consume_line(*str);
 		#insert body;
 	}
 }
 
-consume_one_line :: (str: *string, $support_crlf := true) -> line: string #no_abc {
-	len := S.find_index_from_left(str.*, #char "\n") + 1; // length including line feed
-	defer { str.data += len; str.count -= len; }
-	return view(str, 0, len - ifx support_crlf && len > 1 && str.*[len - 2] == #char "\r" then 2 else 1, false);
+consume_line :: (str: *string, $trimmed := true) -> line: string {
+	len := 1 + S.find_index_from_left(str.*, #char "\n");
+	if !len then len = str.count;
+	line := view(str, 0, len, false);
+	str.data += len; str.count -= len;
+	#if trimmed trim_nl(*line);
+	return line;
 }
 
-first_line :: (str: string, $support_crlf := true) -> line: string #no_abc {
-	len := S.find_index_from_left(str, #char "\n") + 1; // length including line feed
-	return view(str, 0, len - ifx support_crlf && len > 1 && str[len - 2] == #char "\r" then 2 else 1, false);
+first_line :: (str: string, $trimmed := true) -> line: string #must {
+	len := 1 + S.find_index_from_left(str, #char "\n");
+	if !len then len = str.count;
+	line := view(str, 0, len, false);
+	#if trimmed trim_nl(*line);
+	return line;
 }
 
-Text_Grid :: struct {
-	text_ptr: *u8;
-	height:   int;
-	width:    int;
+trim_nl :: (str: *string) {
+	if str.count > 0 && str.*[str.count-1] == #char"\n" {
+		str.count -= 1;
+		if str.count > 0 && str.*[str.count-1] == #char"\r" then str.count -= 1;
+	}
+}
+
+trim_nl :: (str__: string) -> string #must {
+	str := str__;
+	inline trim_nl(*str);
+	return str;
+}
+
+
+
+// --- Grids ---
+
+// Lots of input in aoc is formatted as grids, where there's a set of lines that are all
+// the same length and they represent a 2-dimensional space.
+// This struct is simply a view of such an input with some helper procs to get
+// elements at specific offsets. Keep in mind it is a view of a string!
+Text_Grid_View :: struct {
+	source:   string;
+	width:    int; #place width;  cols: int;
+	height:   int; #place height; rows: int;
 	line_len: int;
 }
 
-text_grid :: (text: string) -> Text_Grid {
-	using tg: Text_Grid;
-	text_ptr = text.data;
-	line_len = S.find_index_from_left(text, #char "\n") + 1;
-	assert(line_len != 0); // -1 got returned
-	width    = line_len - ifx line_len > 1 && text[line_len - 2] == #char "\r" then 2 else 1;
-	height   = text.count / line_len;
+// A simpler grid structure that is not a view of a string, but simply an array with width*height elements.
+// For modification of a grid, you probably want to convert your Text_Grid_View into one of these, otherwise you
+// might accidentally modify your input string. You can use alloc_grid to convert a TGV into a Grid(u8).
+Grid :: struct(T: Type) {
+	array: []T;
+	width:  int; #place width;  cols: int;
+	height: int; #place height; rows: int;
+}
+
+// For inputs where the whole input is one grid
+grid_view :: (text__: string) -> Text_Grid_View {
+	text := text__;
+	return consume_grid_view(*text);
+}
+
+// For inputs that contain multiple grids.
+consume_grid_view :: (text: *string) -> Text_Grid_View {
+	if text.count <= 0 return .{};
+	line1 := consume_line(text, false);
+	tg := Text_Grid_View.{
+		source.data = line1.data, // count not yet known
+		line_len    = line1.count,
+		width       = trim_nl(line1).count,
+		height      = 1,
+	};
+	while 1 {
+		line := consume_line(text, false);
+		if line.count != tg.line_len {
+			// just in case the last line is not newline-terminated, still include it.
+			if line.count == tg.width && line[line.count-1] != #char "\n" then tg.height += 1;
+			break;
+		}
+
+		// Every line of same length adds one height.
+		tg.height += 1;
+	}
+
+	tg.source.count = tg.height * tg.line_len;
+
+	// The line that did not match in length is also consumed.
+	// I assume it is usually an empty line or end of string.
 	return tg;
 }
 
-// returns 0 if out of bounds.
-get :: (using tg: Text_Grid, row: int, col: int, $bounds_check := true) -> u8 {
-	#if bounds_check { if col < 0 || col >= width  return 0; }
-	#if bounds_check { if row < 0 || row >= height return 0; }
-	return text_ptr[row * line_len + col];
+get :: (using tg: Text_Grid_View, row: int, col: int, $use_default := true, $default: u8 = 0) -> u8 {
+	in_bounds := col >= 0 && col < cols && row >= 0 && row < rows;
+	#if use_default { if !in_bounds then return default; }
+	else assert(in_bounds, "row: %, col: %, rows: %, cols: %\n", row, col, rows, cols);
+	return #no_abc source[row * line_len + col]; // prior bounds check means we can #no_abc here.
 }
+get :: (using g: Grid, row: int, col: int, $use_default := true, $default: u8 = 0) -> u8 {
+	in_bounds := col >= 0 && col < cols && row >= 0 && row < rows;
+	#if use_default { if !in_bounds then return default; }
+	else assert(in_bounds, "row: %, col: %, rows: %, cols: %\n", row, col, rows, cols);
+	return #no_abc array[row * cols + col]; // prior bounds check means we can #no_abc here.
+}
+
+get_row :: (using tg: Text_Grid_View, row: int) -> string {
+	assert(row >= 0 && row < rows, "row: %, rows: %\n", row, rows);
+	return view(source, row * line_len, width);
+}
+get_row :: (using g: Grid($T), row: int) -> []T {
+	assert(row >= 0 && row < rows, "row: %, rows: %\n", row, rows);
+	return view(array, row * width, width);
+}
+
+get_col :: (using tg: Text_Grid_View, col: int, buffer: string) {
+	assert(buffer.count == height, "buffer.count: %, height: %\n", buffer.count, height);
+	assert(col >= 0 || col < cols, "col: %, cols: %\n", col, cols);
+	for r: 0..rows-1 { buffer[r] = #no_abc source[r * line_len + col]; }
+}
+get_col :: (using g: Grid, col: int, buffer: string) {
+	assert(buffer.count == height, "buffer.count: %, height: %\n", buffer.count, height);
+	assert(col >= 0 || col < cols, "col: %, cols: %\n", col, cols);
+	for r: 0..rows-1 { buffer[r] = #no_abc array[r * cols + col]; }
+}
+
+free :: inline (grid: Grid) { array_free(grid.array); }
+
+alloc_grid :: inline (rows: int, cols: int, $T: Type = u8) -> Grid(T) {
+	return Grid(T).{
+		array = NewArray(rows * cols, T),
+		rows  = rows,
+		cols  = cols,
+	};
+}
+
+alloc_grid :: (tg: Text_Grid_View) -> Grid(u8) {
+	using g := Grid(u8).{
+		array = NewArray(tg.rows * tg.cols, u8),
+		rows  = tg.rows,
+		cols  = tg.cols,
+	};
+	// copy everything over into a separate grid (cannot copy at once because we are not copying the newlines over)
+	for r: 0..rows-1  typed_memcpy(array.data + r * cols, tg.source.data + r * tg.line_len, cols);
+	return g;
+}
+
 
 
 // --- Quick and easy printing ---
@@ -87,6 +195,17 @@ print_expr :: ($c: Code) #expand {
 		return builder_to_string(*sb);
 	}
 	print("% is %\n", expr_string, #insert c);
+}
+
+print :: inline (using tg: Text_Grid_View) {
+	write_string(source);
+	write_string(ifx source[source.count-1] != #char "\n" then "\n\n" else "\n");
+}
+
+print :: inline (grid: Grid($T)) {
+	VIEW :: #ifx T == u8 then string; else []T;
+	for r: 0..grid.rows-1 print("%\n", cast(VIEW)view(grid.array, r * grid.width, grid.width, false));
+	write_string("\n");
 }
 
 
@@ -156,6 +275,10 @@ operator *[] :: inline (stack: *Fixed_Size_Stack, index: int) -> *stack.T {
 chop_off_end :: (source: *[]$T, len: int) -> []T {
 	defer source.count -= len;
 	return view_from(source, source.count - len);
+}
+
+typed_memcpy :: inline (dest: *$T, src: *T, count: s64) {
+	memcpy(dest, src, count * size_of(T));
 }
 
 

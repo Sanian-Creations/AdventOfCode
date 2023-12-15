@@ -11,7 +11,7 @@ same_calculation :: (input: string, empty_space_multiplier: int) -> int {
 	galaxies: [..] Galaxy; defer array_free(galaxies);
 
 	{
-		grid := text_grid(input);
+		grid := grid_view(input);
 		row_map := NewArray(grid.height + grid.width, int); defer array_free(row_map);
 		col_map := chop_off_end(*row_map, grid.width);
 

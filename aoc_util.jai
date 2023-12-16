@@ -138,6 +138,9 @@ get :: (using g: Grid, row: int, col: int, $use_default := true, $default: u8 = 
 	else assert(in_bounds, "row: %, col: %, rows: %, cols: %\n", row, col, rows, cols);
 	return #no_abc array[row * cols + col]; // prior bounds check means we can #no_abc here.
 }
+address :: (using g: Grid($T), row: int, col: int) -> *T {
+	return *array[row * cols + col];
+}
 
 get_row :: (using tg: Text_Grid_View, row: int) -> string {
 	assert(row >= 0 && row < rows, "row: %, rows: %\n", row, rows);
@@ -241,6 +244,9 @@ abs :: inline (num: int) -> int {
 	return ifx num < 0 then -num else num;
 }
 
+is_even :: inline (num: $T) -> bool { return (num & 1) == 0; }
+is_odd ::  inline (num: $T) -> bool { return (num & 1) != 0; }
+
 sum :: inline (arr: []$T) -> int {
 	total := 0;
 	for arr total += xx it;
@@ -281,6 +287,9 @@ typed_memcpy :: inline (dest: *$T, src: *T, count: s64) {
 	memcpy(dest, src, count * size_of(T));
 }
 
+zero_out_array :: (arr: []$T) {
+	memset(arr.data, 0, arr.count * size_of(T));
+}
 
 
 // --- String indexing ---
